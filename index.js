@@ -1,4 +1,10 @@
-const server = require('./server.js');
+require("dotenv").config();
+const express = require("express");
+const db = require("./data/dbConfig.js");
+
+const server = express();
+
+server.use(express.json());
 
 const PORT = process.env.PORT || 4000;
 
