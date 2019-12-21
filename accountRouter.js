@@ -10,6 +10,19 @@ router.get("/", (req, res, next) => {
     .catch(err => res.status(500).json(err));
 });
 
+router.get("/:id", async (req, res, next) => {
+  try {
+    res.json(
+      await db
+        .select("*")
+        .from("accounts")
+        .where({ id: req.params.id })
+        .first()
+    );
+  } catch (err) {
+    next(err);
+  }
+});
 
 
 module.exports = router;
