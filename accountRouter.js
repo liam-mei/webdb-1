@@ -24,5 +24,33 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
+router.post("/", nameExists, async (req, res, next) => {
+  const { name, budget } = req.body;
+
+  // try {
+  //   const [id] = await db("accounts").insert({ name, budget });
+  //   res.json(
+  //     await db("accounts")
+  //       .where("id", id)
+  //       .first()
+  //   );
+  // } catch (err) {
+  //   res.status(500).json(err);
+  // }
+
+  db("accounts")
+    .insert({ name, budget })
+    .then(array => {
+      const [id] = array;
+      db("accounts")
+        .where({ id })
+        .first()
+        .then(account => res.json(account))
+        .catch(err => next({ ...err, message: "error retrieving account after insert" }));
+    })
+    .catch(err => next({ ...err, message: "error inserting" }));
+});
+
+
 
 module.exports = router;
