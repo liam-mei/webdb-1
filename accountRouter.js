@@ -51,6 +51,24 @@ router.post("/", nameExists, async (req, res, next) => {
     .catch(err => next({ ...err, message: "error inserting" }));
 });
 
+router.put("/:id", nameExists, async (req, res, next) => {
+  const { name, budget } = req.body;
+  const { id } = req.params;
+
+  try {
+    await db("accounts")
+      .where({ id })
+      .update({ name, budget });
+    res.json(
+      await db("accounts")
+        .where({ id })
+        .first()
+    );
+  } catch (err) {
+    next(err);
+  }
+});
+
 
 
 module.exports = router;
