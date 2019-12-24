@@ -69,6 +69,22 @@ router.put("/:id", nameExists, async (req, res, next) => {
   }
 });
 
+router.delete("/:id", (req, res, next) => {});
 
+function nameExists(req, res, next) {
+  const { name } = req.body;
+
+  db("accounts")
+    .select()
+    .where({ name })
+    .first()
+    .then(account => {
+      console.log("account: ", account);
+      if (account)
+        return res.status(400).json({ error: "name already exists, try a different name" });
+      next();
+    })
+    .catch(err => res.status(500).json(err));
+}
 
 module.exports = router;
