@@ -1,10 +1,15 @@
 require("dotenv").config();
 const express = require("express");
-const db = require("./data/dbConfig.js");
+const accountRouter = require("./accountRouter");
 
 const server = express();
 
 server.use(express.json());
+server.use("/api/accounts", accountRouter);
+
+server.use((err, req, res, next) => {
+  res.status(500).json({err})
+})
 
 const PORT = process.env.PORT || 4000;
 
